@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const db = require('./db');
 
@@ -8,6 +9,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Get all tasks
 app.get('/tasks', async (req, res) => {
@@ -110,6 +114,11 @@ app.post('/logs', async (req, res) => {
     console.error('Error saving log:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+// Serve React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 app.listen(PORT, () => {

@@ -8,12 +8,14 @@ import DailyUpdate from './components/DailyUpdate';
 import ModuleEditModal from './components/ModuleEditModal';
 import DailyUpdateModal from './components/DailyUpdateModal';
 
+const API = import.meta.env.PROD ? '' : '/api';
+
 function App() {
   const [modules, setModules] = useState(preloadModules);
   const [dailyLogs, setDailyLogs] = useState([]);
 
   useEffect(() => {
-    fetch('/api/logs')
+    fetch(`${API}/logs`)
       .then(res => res.json())
       .then(data => setDailyLogs(Array.isArray(data) ? data : []))
       .catch(err => console.error('Failed to fetch logs:', err));
@@ -58,7 +60,7 @@ function App() {
   };
 
   const handleSaveDaily = (updatedDaily) => {
-    fetch('/api/logs', {
+    fetch(`${API}/logs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedDaily),
