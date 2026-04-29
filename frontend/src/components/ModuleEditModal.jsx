@@ -29,7 +29,10 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
   };
 
   const handleLabelChange = (key, value) => {
-    setFormData(prev => ({ ...prev, workLabels: { ...prev.workLabels, [key]: value } }));
+    setFormData(prev => ({
+      ...prev,
+      workLabels: { ...prev.workLabels, [key]: value }
+    }));
   };
 
   // Array handlers (currentWork, todaysWork, nextWork)
@@ -79,7 +82,7 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
       <div className="flex items-center justify-between mb-3">
         <input
           type="text"
-          value={formData.workLabels?.[labelKey] || defaultLabel}
+          value={formData.workLabels?.[labelKey] ?? defaultLabel}
           onChange={(e) => handleLabelChange(labelKey, e.target.value)}
           placeholder={defaultLabel}
           className={`text-xs font-bold uppercase tracking-wider bg-transparent border-b border-dashed border-gray-300 outline-none focus:border-blue-500 pb-0.5 ${dotColor}`}
