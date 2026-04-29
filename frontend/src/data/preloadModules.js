@@ -1,104 +1,102 @@
 export const preloadModules = [
   {
-    id: 1,
-    name: "Assets & Operations",
-    description: "(Vehicle, Driver, Trip)",
-    status: "In Progress",
-    progress: 70,
-    customLabels: {
-      current: "Current Work",
-      today: "Today's Work",
-      next: "Next Work"
-    },
-    currentWork: [
-      "Trip Overview UI refinement"
-    ],
-    todaysWork: [
-      "Completed Trip Creation UI fixes",
-      "Improved Vehicle integration"
-    ],
-    nextWork: [
-      "Connect Trip with backend APIs"
-    ],
-    deadline: "3 days",
-    assigned: {
-      frontend: "Ashwini",
-      backend: "Teammate"
-    },
-    blocker: ""
-  },
-  {
     id: 2,
     name: "Service & Maintenance",
     description: "(Service, Repair, Fuel, Expenses)",
     status: "In Progress",
-    progress: 40,
-    customLabels: {
+    deadline: "2026-05-01",
+    assigned: { frontend: "Ashwini", backend: "Sriman" },
+    blocker: "",
+    currentWork: ["Service module logic + UI", "KM-based service rule setup"],
+    todaysWork: ["Completed KM-based service calculation", "Added status workflow (Reported → Completed)"],
+    nextWork: ["API integration for service", "Repair & Fuel UI"],
+    workLabels: {
       current: "Current Work",
-      today: "Today's Work",
+      today: "Completed Today",
       next: "Next Work"
     },
-    currentWork: [
-      "Service module logic + UI"
+    sections: [
+      { name: "Service Add Form",       status: "Completed"   },
+      { name: "Service List UI",        status: "Completed"   },
+      { name: "KM Rule Setup",          status: "In Progress" },
+      { name: "Repair Module",          status: "Pending"     },
+      { name: "Fuel Tracking",          status: "Pending"     },
+      { name: "Expenses Module",        status: "Not Started" },
+      { name: "API Integration",        status: "Not Started" },
     ],
-    todaysWork: [
-      "Completed KM-based service calculation",
-      "Added status workflow (Reported → Completed)"
-    ],
-    nextWork: [
-      "API integration for service"
-    ],
-    deadline: "2 days",
-    assigned: {
-      frontend: "Ashwini",
-      backend: "Teammate"
+  },
+  {
+    id: 1,
+    name: "Assets & Operations",
+    description: "(Vehicle, Driver, Trip)",
+    status: "In Progress",
+    deadline: "2026-05-02",
+    assigned: { frontend: "Ashwini", backend: "Sriman" },
+    blocker: "",
+    currentWork: ["Trip Overview UI refinement"],
+    todaysWork: ["Completed Trip Creation UI fixes", "Improved Vehicle integration"],
+    nextWork: ["Connect Trip with backend APIs"],
+    workLabels: {
+      current: "Current Work",
+      today: "Completed Today",
+      next: "Next Work"
     },
-    blocker: "Waiting for backend API"
+    sections: [
+      { name: "Vehicle Add Form",       status: "Completed"   },
+      { name: "Vehicle List",           status: "Completed"   },
+      { name: "Driver Add Form",        status: "Completed"   },
+      { name: "Driver List",            status: "Completed"   },
+      { name: "Trip Creation UI",       status: "Completed"   },
+      { name: "Trip Overview UI",       status: "In Progress" },
+      { name: "Driver Assignment",      status: "In Progress" },
+      { name: "API Integration",        status: "Pending"     },
+      { name: "Reports",                status: "Not Started" },
+    ],
   },
   {
     id: 3,
     name: "Administration",
     description: "(Users, Roles, Permissions)",
     status: "Not Started",
-    progress: 0,
-    customLabels: {
-      current: "Current Work",
-      today: "Today's Work",
-      next: "Next Work"
-    },
+    deadline: "2026-06-01",
+    assigned: { frontend: "Unassigned", backend: "Unassigned" },
+    blocker: "",
     currentWork: [],
     todaysWork: [],
-    nextWork: [
-      "Design role-based access"
-    ],
-    deadline: "Next phase",
-    assigned: {
-      frontend: "Unassigned",
-      backend: "Unassigned"
+    nextWork: ["Design role-based access"],
+    workLabels: {
+      current: "Current Work",
+      today: "Completed Today",
+      next: "Next Work"
     },
-    blocker: ""
+    sections: [
+      { name: "User Management",        status: "Not Started" },
+      { name: "Role Setup",             status: "Not Started" },
+      { name: "Permissions Matrix",     status: "Not Started" },
+      { name: "API Integration",        status: "Not Started" },
+    ],
   },
   {
     id: 4,
-    name: "Reports / Analytics",
-    description: "(Dashboard, summaries, insights)",
+    name: "Reports & Analytics",
+    description: "(Dashboard, Reports, Insights)",
     status: "Not Started",
-    progress: 0,
-    customLabels: {
-      current: "Current Work",
-      today: "Today's Work",
-      next: "Next Work"
-    },
+    deadline: "2026-06-15",
+    assigned: { frontend: "Unassigned", backend: "Unassigned" },
+    blocker: "",
     currentWork: [],
     todaysWork: [],
-    nextWork: [
-      "Dashboard design"
-    ],
-    deadline: "Next phase",
-    assigned: {
-      frontend: "Unassigned",
-      backend: "Unassigned"
+    nextWork: ["Dashboard design"],
+    workLabels: {
+      current: "Current Work",
+      today: "Completed Today",
+      next: "Next Work"
     },
-    blocker: ""
-  }
+    sections: [
+      { name: "Dashboard UI",           status: "Not Started" },
+      { name: "Reports Module",         status: "Not Started" },
+      { name: "Insights & Charts",      status: "Not Started" },
+      { name: "Export Feature",         status: "Not Started" },
+    ],
+  },
 ];

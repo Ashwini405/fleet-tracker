@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { LayoutDashboard, DownloadCloud, MessageSquareText, Plus, Search, XCircle } from 'lucide-react';
 import { preloadModules } from './data/preloadModules';
 
+import CurrentFocus from './components/CurrentFocus';
+import TodaySummary from './components/TodaySummary';
 import SummaryCards from './components/SummaryCards';
 import ModuleCard from './components/ModuleCard';
 import DailyUpdate from './components/DailyUpdate';
@@ -154,6 +156,12 @@ function App() {
       </header>
 
       <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {/* CURRENT FOCUS */}
+        <CurrentFocus modules={modules} />
+
+        {/* TODAY SUMMARY */}
+        <TodaySummary dailyLogs={dailyLogs} />
 
         {/* TOP SUMMARY */}
         <SummaryCards modules={modules} />
