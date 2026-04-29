@@ -24,7 +24,8 @@ function App() {
   };
 
   const handleSaveModule = (updatedModule) => {
-    setModules(modules.map(m => m.id === updatedModule.id ? updatedModule : m));
+    setModules(prevModules => prevModules.map(m => m.id === updatedModule.id ? updatedModule : m));
+    setEditingModule(updatedModule);
   };
 
   // Timeline Handlers

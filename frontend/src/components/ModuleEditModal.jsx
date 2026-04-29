@@ -7,7 +7,11 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
   useEffect(() => {
     if (module) {
       // Deep clone the module so we don't accidentally mutate state before saving
-      setFormData(JSON.parse(JSON.stringify(module)));
+      const clonedModule = JSON.parse(JSON.stringify(module));
+      setFormData({
+        ...clonedModule,
+        customLabels: clonedModule.customLabels || {}
+      });
     }
   }, [module]);
 
@@ -30,7 +34,10 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
   const handleLabelChange = (labelKey, value) => {
     setFormData(prev => ({
       ...prev,
-      customLabels: { ...prev.customLabels, [labelKey]: value }
+      customLabels: {
+        ...(prev.customLabels || {}),
+        [labelKey]: value
+      }
     }));
   };
 
@@ -65,7 +72,7 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
   };
 
   const renderListEditor = (titleKey, defaultTitle, arrayName, placeholder, badgeColor) => {
-    const listTitle = formData.customLabels?.[titleKey] || defaultTitle;
+    const listTitle = formData.customLabels?.[titleKey] ?? defaultTitle;
     
     return (
       <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl mt-4">
@@ -76,7 +83,7 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
               type="text" 
               value={listTitle} 
               onChange={(e) => handleLabelChange(titleKey, e.target.value)}
-              className="bg-transparent border-b border-dashed border-gray-300 text-sm font-bold text-gray-700 uppercase tracking-widest focus:border-blue-500 outline-none w-full pb-0.5"
+              className="bg-transparent border-b border-dashed border-gray-300 text-sm font-bold text-gray-700 focus:border-blue-500 outline-none w-full pb-0.5"
               title="Edit heading name"
             />
           </div>
