@@ -19,7 +19,12 @@ function App() {
   useEffect(() => {
     fetch(`${API}/modules`)
       .then(res => res.json())
-      .then(data => { if (Array.isArray(data) && data.length > 0) setModules(data); })
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          // Merge: start from preload, override with any saved DB versions
+          setModules(preloadModules.map(m => data.find(d => d.id === m.id) || m));
+        }
+      })
       .catch(err => console.error('Failed to fetch modules:', err));
 
     fetch(`${API}/logs`)
