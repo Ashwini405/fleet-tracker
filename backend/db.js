@@ -20,7 +20,7 @@ async function initDB() {
     const connection = await pool.getConnection();
     console.log('Connected to Aiven MySQL database successfully.');
 
-    const createTableQuery = `
+    await connection.query(`
       CREATE TABLE IF NOT EXISTS tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         task VARCHAR(255) NOT NULL,
@@ -29,9 +29,18 @@ async function initDB() {
         status ENUM('Pending', 'In Progress', 'Done') DEFAULT 'Pending',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-    `;
-    await connection.query(createTableQuery);
-    console.log('Tasks table checked/created.');
+    `);
+
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS daily_logs (
+        id VARCHAR(50) PRIMARY KEY,
+        log_date DATE NOT NULL,
+        updates JSON NOT NULL,
+        shared_blockers JSON NOT NULL DEFAULT ('[]'),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('Tables checked/created.');
     connection.release();
   } catch (error) {
     console.error('Database connection failed:', error.message);

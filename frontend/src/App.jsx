@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutDashboard, DownloadCloud, MessageSquareText, Plus, Search, XCircle } from 'lucide-react';
 import { preloadModules } from './data/preloadModules';
-import { preloadDaily } from './data/preloadDaily';
 
 import SummaryCards from './components/SummaryCards';
 import ModuleCard from './components/ModuleCard';
@@ -11,7 +10,14 @@ import DailyUpdateModal from './components/DailyUpdateModal';
 
 function App() {
   const [modules, setModules] = useState(preloadModules);
-  const [dailyLogs, setDailyLogs] = useState(preloadDaily);
+  const [dailyLogs, setDailyLogs] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/logs')
+      .then(res => res.json())
+      .then(data => setDailyLogs(Array.isArray(data) ? data : []))
+      .catch(err => console.error('Failed to fetch logs:', err));
+  }, []);
   const [showAllLogs, setShowAllLogs] = useState(false);
   const [filterDate, setFilterDate] = useState('');
 
@@ -52,14 +58,21 @@ function App() {
   };
 
   const handleSaveDaily = (updatedDaily) => {
-    // Check if it exists
-    const exists = dailyLogs.find(l => l.id === updatedDaily.id);
-    if (exists) {
-      setDailyLogs(dailyLogs.map(l => l.id === updatedDaily.id ? updatedDaily : l));
-    } else {
-      // Add to front of timeline
-      setDailyLogs([updatedDaily, ...dailyLogs]);
-    }
+    fetch('/api/logs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedDaily),
+    })
+      .then(res => res.json())
+      .then(saved => {
+        setDailyLogs(prev => {
+          const exists = prev.find(l => l.id === saved.id);
+          return exists
+            ? prev.map(l => l.id === saved.id ? saved : l)
+            : [saved, ...prev];
+        });
+      })
+      .catch(err => console.error('Failed to save log:', err));
   };
 
   const filteredLogs = dailyLogs.filter(log => {

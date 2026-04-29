@@ -75,6 +75,43 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
+// Get all daily logs
+app.get('/logs', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM daily_logs ORDER BY log_date DESC');
+    const logs = rows.map(row => ({
+      id: row.id,
+      date: row.log_date instanceof Date ? row.log_date.toISOString().split('T')[0] : String(row.log_date).split('T')[0],
+      updates: typeof row.updates === 'string' ? JSON.parse(row.updates) : row.updates,
+      sharedBlockers: typeof row.shared_blockers === 'string' ? JSON.parse(row.shared_blockers) : row.shared_blockers,
+    }));
+    res.json(logs);
+  } catch (error) {
+    console.error('Error fetching logs:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Create or update a daily log (upsert)
+app.post('/logs', async (req, res) => {
+  const { id, date, updates, sharedBlockers } = req.body;
+  if (!id || !date || !updates) {
+    return res.status(400).json({ error: 'id, date, and updates are required.' });
+  }
+  try {
+    await db.query(
+      `INSERT INTO daily_logs (id, log_date, updates, shared_blockers)
+       VALUES (?, ?, ?, ?)
+       ON DUPLICATE KEY UPDATE log_date = VALUES(log_date), updates = VALUES(updates), shared_blockers = VALUES(shared_blockers)`,
+      [id, date, JSON.stringify(updates), JSON.stringify(sharedBlockers || [])]
+    );
+    res.status(201).json({ id, date, updates, sharedBlockers: sharedBlockers || [] });
+  } catch (error) {
+    console.error('Error saving log:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
