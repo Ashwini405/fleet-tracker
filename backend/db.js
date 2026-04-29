@@ -32,6 +32,14 @@ async function initDB() {
     `);
 
     await connection.query(`
+      CREATE TABLE IF NOT EXISTS modules (
+        id INT PRIMARY KEY,
+        data JSON NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      );
+    `);
+
+    await connection.query(`
       CREATE TABLE IF NOT EXISTS daily_logs (
         id VARCHAR(50) PRIMARY KEY,
         log_date DATE NOT NULL,

@@ -79,6 +79,38 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 });
 
+// Get all modules
+app.get('/modules', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT id, data FROM modules ORDER BY id ASC');
+    const modules = rows.map(row => ({
+      id: row.id,
+      ...(typeof row.data === 'string' ? JSON.parse(row.data) : row.data)
+    }));
+    res.json(modules);
+  } catch (error) {
+    console.error('Error fetching modules:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Upsert a module
+app.post('/modules', async (req, res) => {
+  const { id, ...rest } = req.body;
+  if (!id) return res.status(400).json({ error: 'id is required.' });
+  try {
+    await db.query(
+      `INSERT INTO modules (id, data) VALUES (?, ?)
+       ON DUPLICATE KEY UPDATE data = VALUES(data)`,
+      [id, JSON.stringify(rest)]
+    );
+    res.status(201).json({ id, ...rest });
+  } catch (error) {
+    console.error('Error saving module:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 // Get all daily logs
 app.get('/logs', async (req, res) => {
   try {

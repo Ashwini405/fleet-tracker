@@ -17,6 +17,11 @@ function App() {
   const [dailyLogs, setDailyLogs] = useState([]);
 
   useEffect(() => {
+    fetch(`${API}/modules`)
+      .then(res => res.json())
+      .then(data => { if (Array.isArray(data) && data.length > 0) setModules(data); })
+      .catch(err => console.error('Failed to fetch modules:', err));
+
     fetch(`${API}/logs`)
       .then(res => res.json())
       .then(data => setDailyLogs(Array.isArray(data) ? data : []))
@@ -34,8 +39,17 @@ function App() {
   };
 
   const handleSaveModule = (updatedModule) => {
-    setModules(prevModules => prevModules.map(m => m.id === updatedModule.id ? updatedModule : m));
-    setEditingModule(updatedModule);
+    fetch(`${API}/modules`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedModule),
+    })
+      .then(res => res.json())
+      .then(saved => {
+        setModules(prev => prev.map(m => m.id === saved.id ? saved : m));
+        setEditingModule(saved);
+      })
+      .catch(err => console.error('Failed to save module:', err));
   };
 
   // Timeline Handlers
