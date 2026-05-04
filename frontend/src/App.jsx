@@ -174,6 +174,41 @@ function App() {
         </div>
       </header>
 
+      {/* OVERALL PROJECT PROGRESS BAR */}
+      <div className="bg-slate-800 border-b border-slate-700">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          {(() => {
+            const total = modules.length;
+            const done = modules.filter(m => m.status === 'Completed').length;
+            const inProgress = modules.filter(m => m.status === 'In Progress');
+            const donePct = total > 0 ? Math.round((done / total) * 100) : 0;
+            // In-progress contribution: each in-progress module contributes its section completion / total modules
+            const inProgressPct = total > 0 ? Math.round(
+              inProgress.reduce((sum, m) => {
+                const t = m.sections?.length || 0;
+                const c = m.sections?.filter(s => s.status === 'Completed').length || 0;
+                return sum + (t > 0 ? c / t : 0);
+              }, 0) / total * 100
+            ) : 0;
+            const totalPct = donePct + inProgressPct;
+            return (
+              <>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Overall Project Progress</span>
+                  <span className="text-sm font-bold text-white">{done} / {total} modules completed &nbsp;·&nbsp; {inProgress.length} in progress &nbsp;·&nbsp; {totalPct}%</span>
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                  <div className="h-2 flex">
+                    <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500" style={{ width: `${donePct}%` }} />
+                    <div className="h-2 bg-blue-400/40 transition-all duration-500" style={{ width: `${inProgressPct}%` }} />
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </div>
+
       <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* CURRENT FOCUS */}

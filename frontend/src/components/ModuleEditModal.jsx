@@ -179,6 +179,9 @@ export default function ModuleEditModal({ isOpen, onClose, onSave, module }) {
                     onChange={(e) => handleSectionChange(idx, 'name', e.target.value)}
                     placeholder="Section name"
                     className="flex-1 bg-white border border-gray-300 text-gray-900 text-sm rounded p-2 outline-none focus:ring-1 focus:ring-blue-500" />
+                  <input type="date" value={section.deadline || ''}
+                    onChange={(e) => handleSectionChange(idx, 'deadline', e.target.value)}
+                    className="bg-white border border-gray-300 text-gray-700 text-xs rounded p-2 outline-none focus:ring-1 focus:ring-blue-500" />
                   <select value={section.status}
                     onChange={(e) => handleSectionChange(idx, 'status', e.target.value)}
                     className="bg-white border border-gray-300 text-gray-800 text-xs rounded p-2 outline-none cursor-pointer focus:ring-1 focus:ring-blue-500">

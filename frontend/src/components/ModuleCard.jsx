@@ -120,14 +120,40 @@ export default function ModuleCard({ module, onEdit }) {
           <div>
             <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Module Sections</h4>
             <div className="space-y-2">
-              {module.sections.map((section, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-sm">
-                  <SectionIcon status={section.status} />
-                  <span className={`${section.status === 'Completed' ? 'text-gray-500' : 'text-gray-800'}`}>
-                    {section.name}
-                  </span>
-                </div>
-              ))}
+              {module.sections.map((section, idx) => {
+                const today = new Date(); today.setHours(0,0,0,0);
+                const due = section.deadline ? new Date(section.deadline) : null;
+                if (due) due.setHours(0,0,0,0);
+                const diff = due ? Math.round((due - today) / (1000 * 60 * 60 * 24)) : null;
+                const isOverdue = diff !== null && diff < 0 && section.status !== 'Completed';
+                return (
+                  <div key={idx} className="flex items-center justify-between gap-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <SectionIcon status={section.status} />
+                      <span className={section.status === 'Completed' ? 'text-gray-500' : 'text-gray-800'}>
+                        {section.name}
+                      </span>
+                    </div>
+                    {section.deadline && (() => {
+                      const dueDate = new Date(section.deadline);
+                      const formattedDate = dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                      const daysLabel = section.status === 'Completed' ? '✓' :
+                        isOverdue ? `${Math.abs(diff)}d overdue` :
+                        diff === 0 ? 'today' :
+                        `${diff}d left`;
+                      const labelClass = section.status === 'Completed' ? 'text-gray-400' :
+                        isOverdue ? 'text-red-500' :
+                        diff === 0 ? 'text-orange-500' :
+                        'text-slate-400';
+                      return (
+                        <span className={`text-[10px] font-semibold shrink-0 ${labelClass}`}>
+                          {daysLabel === '✓' ? '✓' : `${formattedDate} (${daysLabel})`}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
